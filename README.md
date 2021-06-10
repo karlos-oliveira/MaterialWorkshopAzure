@@ -2,7 +2,6 @@
 Preparando o ambiente
 --------------------------------------------------------------------------------------
 - Git instalado -> https://git-scm.com/downloads/
-- Docker instalado -> https://www.docker.com/products/docker-desktop
 - Criar uma conta no Visual Studio Dev Essentials -> https://visualstudio.microsoft.com/pt-br/dev-essentials/
 
 --------------------------------------------------------------------------------------
@@ -12,62 +11,11 @@ Habilitando seus creditos Gratis
 - Na pagina inicial, procure o card referente a avaliação gratuita do Azure
 - Clique em Iniciar e siga as etapas descritas na tela, pode ser necessário colocar o seu cartão de crédito no processo porém a microsoft garante que nenhuma cobrança será feita sem seu conscentimento
 - Feito o cadastro e a liberação dos 30 dias gratuitos, siga para os proximos passos
-
---------------------------------------------------------------------------------------
-Configurando o Docker
---------------------------------------------------------------------------------------
-- Após instalar o docker em sua máquina é importante (para esse tutorial) que seus containers sejam baseados em Linux
-- Se estiver no ambiente windows, procure o docker em sua barra de sistema, clique com o botão direito sobre ele e clique em "Switch to Linux Containers"
-- Isso é possivel graças ao WSL do windows 10
-- Caso encontre algum erro, é possivel que seja necessário instalar uma atualização que se encontra em -> https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi
-- Depois de instalado, basta ir novamente em "Switch to Linux Containers"
-
 --------------------------------------------------------------------------------------
 Criando seu Agent Pool Self Hosted
 --------------------------------------------------------------------------------------
-- Acesse https://dev.azure.com/
-- No Canto inferior esquerdo, clique em "Organization Settings"
-- Clique em "Agent Pools" e depois em "Add pool"
-- Em "Pool type" selecione "Self Hosted" e de um nome de sua preferencia (no meu caso darei o nome de "Carlos Pipeline")
-- Certifique-se que os 2 campos abaixo estarão selecionados
-	- Grant access permission to all pipelines
-	- Auto-provision this agent pool in all projects
-- Clique em "Create"
 
-Criando seu Agent
-
-- Clique no Agent Pool que acabou de criar (no meu caso "Carlos Pipeline")
-- Navegue até a aba Agents e clique em "New agent"
-- No PopUp que aparecerá, selecione o seu sistema operacional e clique no botão de "Download" e pode fechar o popup
-- Crie uma pasta com o nome que preferir, aqui chamarei ela de "agent"
-- Extraia o conteudo do zip que baixamos nas etapas anteriores para essa pasta
-
-Configurando seu Agent
-
-- Abra o powershell, navegue até a pasta onde você extraiu o zip baixado e execute o arquivo "config.cmd"
-	- PS C:\Pasta\Onde\Extraiu> .\config.cmd
-- Agora a ferramenta vai pedir algumas informações sobre seu server no AzureDevOps
-	- Server Url -> Acesse https://dev.azure.com/ e copie a url que estiver no seu navegador, deve ser algo como "https://dev.azure.com/SuaOrganização"
-	- Authentication type -> só tem uma opção disponivel (PAT), então basta apertar "Enter"	
-	- Personal access token (PAT) -> no canto superior direito ao lado das suas iniciais, tem um botão que remete ao "User Settings", clique neste botão e depois clique em personal user tokens
-		- Na proxima tela, clique em "New Token"
-		- No campo Name, defina um nome a sua escolha, eu colocarei "Agent Access"
-		- No final da tela, clique no link "Show all scopes"
-		- suba o scroll da tela e encontre o contexto "Agent Pools" e selecione "Read & manage"
-		- Clique no botão "Create"
-		- Nesse momento será mostrado para você um campo de texto com um codigo, esse será seu PAT
-		- Clique no botão que parecem duas folhas para copiar o código sem erros
-	- Volte no seu Powershell e clique com o botão direito do mouse para colar seu codigo PAT e aperte "Enter"
-	- agora seu Agent Pool self hosted já esta conectado, vamos terminar de configurá-lo
-	- Agent Pool -> coloque o nome do agent pool que criou lá nos primeiros passos, no meu caso "Carlos Pipeline" e aperte "Enter"
-	- Agent Name -> Esse é o nome da maquina em que aquele Agent está rodando, vou colocar como "NoteBookCarlos" e depois, aperte "Enter"
-	- Work Folder - Vamos deixar padrão, basta apertar "Enter"
-	- Run as Service -> Vamos deixar padrão, basta apertar "Enter"
-	- Configure Autologin and run -> Vamos deixar padrão, basta apertar "Enter"
-	- Prontinho, agora nosso agent está configurado, mas ainda precisamos rodá-lo, para isso execute o arquivo "run.cmd"
-		- PS C:\Pasta\Onde\Extraiu> .\run.cmd
-
-	- Agora se voltar em "Organization Settings" -> "Agent Pools" -> seu agent pool criado -> aba "Agents", verá seu agent self hosted online e esperando para executar os jobs
+Para uma leitura mais agradável, escrevi este passo no Medium -> https://medium.com/@karlos.s.oliveira/criando-um-self-hosted-agent-pool-na-azure-39925657d07
 
 --------------------------------------------------------------------------------------
 Criando um Registro de contêiner
