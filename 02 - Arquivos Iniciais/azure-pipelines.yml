@@ -1,0 +1,54 @@
+# Starter pipeline
+trigger:
+  - master
+  - release
+
+variables:
+  ## Container registry service connection established during pipeline creation
+  imageRepository: 'API-DISPLAY-NAME'
+  containerRegistry: 'CONTAINER-REGISTRY-NAME'
+  agentPoolName: 'AGENT-POOL-NAME' # comment this line if you have a corporative or paid azure subscription
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build and push stage
+  jobs:  
+  - job: Build_Release
+    displayName: Build release
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/release'))
+    pool:
+      name: $(agentPoolName) # comment this line if you have a corporative or paid azure subscription
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: '${{variables.imageRepository}}-RELEASE'
+        dockerfile: $(dockerfilePath)
+        containerRegistry: '${{variables.containerRegistry}}'
+        tags: |
+          $(tag)
+          latest
+  - job: Build_Production
+    displayName: Build production
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    pool:
+      name: $(agentPoolName) # comment this line if you have a corporative or paid azure subscription
+      vmImage: $(vmImageName)
+    steps:
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: '${{variables.containerRegistry}}'
+        tags: |
+          $(tag)
+          latest
